@@ -10,7 +10,7 @@ public class BenchmarkPostProcessor implements BeanPostProcessor {
         System.out.println("Bean " + beanName + " created");
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {

@@ -24,6 +24,7 @@ public class SimplePizzaService implements PizzaService {
     }
 
     @Override
+    @Benchmark(active = true)
     public List<Pizza> getAllPizzas() {
         List<Pizza> pizzas = pizzaRepository.getPizzas();
         List<Pizza> clonePizzas = makeClone(pizzas);
@@ -39,7 +40,6 @@ public class SimplePizzaService implements PizzaService {
     }
 
     @Override
-    @Benchmark(active = true)
     public Pizza getPizzaById(Integer id) {
         Pizza pizza = pizzaRepository.getPizzas().stream().filter(pizza1 ->
                 pizza1.getId().equals(id)).findFirst().get();

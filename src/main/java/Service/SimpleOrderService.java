@@ -25,7 +25,6 @@ public class SimpleOrderService implements OrderService {
         this.pizzaService = pizzaService;
         this.orderRepository = orderRepository;
     }
-
     @Benchmark(active = true)
     public Order placeNewOrder(Customer customer, Integer ... pizzasID) {
         List<Pizza> pizzas = pizzasListFromArrayOfIds(pizzasID);

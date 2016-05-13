@@ -1,3 +1,5 @@
+package app;
+
 import Domain.Customer;
 import Domain.Order;
 import Service.OrderService;
@@ -20,6 +22,7 @@ public class SpringPizzaApp {
                 .getBean("orderService", OrderService.class);
         Order order = orderService.placeNewOrder(
                 new Customer(0, "Kolia", "Kyiv, Kovalskogo 5"), 0, 1);
+        System.out.println("GOT PIZZA BY ID = 0: " + pizzaService.getPizzaById(0));
         order = orderService.addPizzaToOrder(order, 2);
         System.out.println("Price: " + order.getTotalPrice());
         List<Order> orders = orderService.getAllOrders();

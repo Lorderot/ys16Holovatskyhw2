@@ -24,7 +24,7 @@ public class ProxyForBenchmark {
         if (!hasAnyMethodBenchmarkAnnotation) {
             return bean;
         }
-        return Proxy.newProxyInstance(ClassLoader.getSystemClassLoader(),
+        return Proxy.newProxyInstance(this.getClass().getClassLoader(),
                 ClassUtils.getAllInterfaces(bean), (proxy, method, args) -> {
                     Benchmark annotation = bean.getClass()
                             .getMethod(method.getName(),
