@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface OrderRepository {
 
-    void create(Order order);
+    boolean create(Order order);
 
     boolean update(Order order);
 
-    boolean delete(Order order);
+    boolean delete(Integer orderId);
 
     List<Order> getOrders();
+
+    Order getOrderById(Integer id);
 }

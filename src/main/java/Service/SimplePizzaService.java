@@ -1,13 +1,13 @@
 package Service;
 
 import Domain.Pizza;
+import Exceptions.NoSuchPizzaException;
 import Infrastructure.Benchmark;
 import Repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,53 +27,63 @@ public class SimplePizzaService implements PizzaService {
     @Benchmark(active = true)
     public List<Pizza> getAllPizzas() {
         List<Pizza> pizzas = pizzaRepository.getPizzas();
-        List<Pizza> clonePizzas = makeClone(pizzas);
-        return clonePizzas;
+        return makeClone(pizzas);
     }
 
     @Override
     public List<Pizza> getPizzasByType(Pizza.PizzaType type) {
         List<Pizza> pizzas = pizzaRepository.getPizzas().stream().filter(pizza ->
                 pizza.getType().equals(type)).collect(Collectors.toList());
-        List<Pizza> clonePizzas = makeClone(pizzas);
-        return clonePizzas;
+        return makeClone(pizzas);
     }
 
     @Override
-    public Pizza getPizzaById(Integer id) {
-        Pizza pizza = pizzaRepository.getPizzas().stream().filter(pizza1 ->
-                pizza1.getId().equals(id)).findFirst().get();
-        Pizza clonePizza = new Pizza(pizza);
-        return clonePizza;
+    public Pizza getPizzaById(Integer id) throws NoSuchPizzaException {
+        Pizza pizza = pizzaRepository.getPizzaById(id);
+        if (pizza == null) {
+            throw new NoSuchPizzaException(id);
+        }
+        return pizza;
     }
 
     @Override
     public List<Pizza> getPizzasSortedByPrice() {
         List<Pizza> pizzas = pizzaRepository.getPizzas().stream()
-                .sorted(new Comparator<Pizza>() {
-            @Override
-            public int compare(Pizza o1, Pizza o2) {
-                if (o1 == null || o2 == null) {
-                    return -1;
-                }
-                if (o1.getPrice() < o2.getPrice()) {
-                    return -1;
-                }
-                if (o1.getPrice() == o2.getPrice()) {
-                    return 0;
-                }
-                return 1;
-            }
+                .sorted((firstPizza, secondPizza) -> {
+                    if (firstPizza == null || secondPizza == null) {
+                        return -1;
+                    }
+                    if (firstPizza.getPrice() < secondPizza.getPrice()) {
+                        return -1;
+                    }
+                    if (firstPizza.getPrice().equals(secondPizza.getPrice())) {
+                        return 0;
+                    }
+                    return 1;
         }).collect(Collectors.toList());
-        List<Pizza> clonePizzas = makeClone(pizzas);
-        return clonePizzas;
+        return makeClone(pizzas);
+    }
+
+    @Override
+    public Pizza updatePizzaPriceById(Integer pizzaId, Double price)
+            throws NoSuchPizzaException {
+        Pizza pizza = pizzaRepository.getPizzaById(pizzaId);
+        if (pizza == null) {
+            throw new NoSuchPizzaException(pizzaId);
+        }
+        pizza.setPrice(price);
+        pizzaRepository.update(pizza);
+        return pizza;
+    }
+
+    @Override
+    public boolean addPizza(Pizza pizza) {
+        return pizzaRepository.create(pizza);
     }
 
     private List<Pizza> makeClone(List<Pizza> pizzas) {
         List<Pizza> clone = new ArrayList<>(pizzas.size());
-        for (Pizza pizza : pizzas) {
-            clone.add(new Pizza(pizza));
-        }
+        pizzas.forEach((pizza -> clone.add(new Pizza(pizza))));
         return clone;
     }
 }

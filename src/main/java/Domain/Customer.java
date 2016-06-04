@@ -5,10 +5,19 @@ public class Customer {
     private String name;
     private String address;
 
+    public Customer() {
+    }
+
     public Customer(Integer id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
+    }
+
+    public Customer(Customer customer) {
+        this.id = customer.id;
+        this.name = customer.name;
+        this.address = customer.address;
     }
 
     public Integer getId() {

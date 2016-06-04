@@ -2,6 +2,7 @@ package Infrastructure;
 
 import org.springframework.util.ClassUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -33,12 +34,20 @@ public class ProxyForBenchmark {
                     Object response;
                     if (annotation != null && annotation.active()) {
                         long start = System.nanoTime();
-                        response = method.invoke(bean, args);
+                        try {
+                            response = method.invoke(bean, args);
+                        } catch (InvocationTargetException e) {
+                            throw e.getTargetException();
+                        }
                         long finish = System.nanoTime();
                         System.out.println("Method: " + method.getName());
                         System.out.println("Time: " + (finish - start));
                     } else {
-                        response = method.invoke(bean, args);
+                        try {
+                            response = method.invoke(bean, args);
+                        }catch (InvocationTargetException e) {
+                            throw e.getTargetException();
+                        }
                     }
                     return response;
                 });

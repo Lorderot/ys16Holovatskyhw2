@@ -2,6 +2,7 @@ package web;
 
 import Domain.Order;
 import Domain.Pizza;
+import Exceptions.NoSuchPizzaException;
 import Service.OrderService;
 import Service.PizzaService;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -54,17 +55,21 @@ public class PizzaServlet extends HttpServlet {
             OrderService orderService = applicationContext.getBean(OrderService.class);
 
             String pizzasArr = request.getParameter("pizzas");
-            if (pizzasArr != null) {
-
-                Integer[] pizzasID = parseStringToArray(request.getParameter("pizzas"));
-                Order order = orderService.placeNewOrder(null, pizzasID);
-                orderService.placeNewOrder(null, pizzasID);
-                out.println("Pizzas in order: " + order.getOrderList());
-                out.println("<br>");
-                out.println("Total price: "  + order.getTotalPrice());
+            try {
+                if (pizzasArr != null) {
+                    Integer[] pizzasID = parseStringToArray(request.getParameter("pizzas"));
+                    Order order = orderService.placeNewOrder(null, pizzasID);
+                    orderService.placeNewOrder(null, pizzasID);
+                    out.println("Pizzas in order: " + order.getOrderList());
+                    out.println("<br>");
+                    out.println("Total price: "  + order.getTotalPrice());
+                }
+            } catch (NoSuchPizzaException e) {
+                out.println("No such pizzas");
+            } finally {
+                out.println("</body>");
+                out.println("</html>");
             }
-            out.println("</body>");
-            out.println("</html>");
         }
     }
 
@@ -87,9 +92,7 @@ public class PizzaServlet extends HttpServlet {
 
     private Integer[] parseStringToArray(String arr) {
         String[] items = arr.replaceAll("\\[", "").replaceAll("\\]", "").split(",");
-
         Integer[] results = new Integer[items.length];
-
         for (int i = 0; i < items.length; i++) {
             try {
                 results[i] = Integer.parseInt(items[i]);
