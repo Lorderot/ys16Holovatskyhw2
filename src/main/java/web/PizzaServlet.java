@@ -2,7 +2,6 @@ package web;
 
 import Domain.Order;
 import Domain.Pizza;
-import Exceptions.NoSuchPizzaException;
 import Service.OrderService;
 import Service.PizzaService;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,7 +23,7 @@ public class PizzaServlet extends HttpServlet {
     public void init() {
         repositoryContext = new ClassPathXmlApplicationContext("repositoryContext.xml");
         applicationContext = new ClassPathXmlApplicationContext(
-                        new String[] {"appContext.xml"}, repositoryContext);
+                        new String[] {"resources/appContext.xml"}, repositoryContext);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -55,21 +54,16 @@ public class PizzaServlet extends HttpServlet {
             OrderService orderService = applicationContext.getBean(OrderService.class);
 
             String pizzasArr = request.getParameter("pizzas");
-            try {
-                if (pizzasArr != null) {
-                    Integer[] pizzasID = parseStringToArray(request.getParameter("pizzas"));
-                    Order order = orderService.placeNewOrder(null, pizzasID);
-                    orderService.placeNewOrder(null, pizzasID);
-                    out.println("Pizzas in order: " + order.getOrderList());
-                    out.println("<br>");
-                    out.println("Total price: "  + order.getTotalPrice());
-                }
-            } catch (NoSuchPizzaException e) {
-                out.println("No such pizzas");
-            } finally {
-                out.println("</body>");
-                out.println("</html>");
+            if (pizzasArr != null) {
+                Integer[] pizzasID = parseStringToArray(request.getParameter("pizzas"));
+                Order order = orderService.placeNewOrder(null, pizzasID);
+                orderService.placeNewOrder(null, pizzasID);
+                out.println("Pizzas in order: " + order.getOrderList());
+                out.println("<br>");
+                out.println("Total price: "  + order.getTotalPrice());
             }
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 

@@ -1,7 +1,6 @@
 package web;
 
 import Domain.Pizza;
-import Exceptions.NoSuchPizzaException;
 import Service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,30 +27,29 @@ public class PizzaController {
 
     @RequestMapping(value = "pizza/{id}", method = RequestMethod.GET)
     public ResponseEntity<Pizza> pizzaById(@PathVariable("id")int id) {
-        try {
-            return new ResponseEntity<>(pizzaService.getPizzaById(id),
-                    HttpStatus.OK);
-        } catch (NoSuchPizzaException e) {
+        Pizza pizza = pizzaService.getPizzaById(id);
+        if (pizza == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(pizza,
+                HttpStatus.OK);
     }
 
     @RequestMapping(value = "pizza/{id}/price", method = RequestMethod.GET)
     public ResponseEntity<Double> getPizzaPrice(@PathVariable("id")int id) {
-        try {
-            return new ResponseEntity<>(pizzaService.getPizzaById(id)
-                    .getPrice(), HttpStatus.OK);
-        } catch (NoSuchPizzaException e) {
+        Pizza pizza = pizzaService.getPizzaById(id);
+        if (pizza == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>(pizza.getPrice(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "pizza/{id}/price/{price}", method = RequestMethod.PUT)
     public ResponseEntity updatePizzaPrice(@PathVariable("id") int id,
                                        @PathVariable("price") double price) {
-        try {
-            pizzaService.updatePizzaPriceById(id, price);
-        } catch (NoSuchPizzaException e) {
+        Pizza pizza = pizzaService.updatePizzaPriceById(id, price);
+        if (pizza == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(HttpStatus.OK);
@@ -63,7 +61,7 @@ public class PizzaController {
     public ResponseEntity<Integer> addPizza(@RequestBody Pizza pizza) {
         System.out.println("Created " + pizza);
         if (!pizzaService.addPizza(pizza)) {
-            return new ResponseEntity<>(HttpStatus.FOUND);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(pizza.getId(), HttpStatus.CREATED);
     }

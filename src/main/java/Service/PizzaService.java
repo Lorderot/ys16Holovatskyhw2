@@ -11,7 +11,7 @@ public interface PizzaService {
 
     Pizza getPizzaById(Integer id);
 
-    List<Pizza> getPizzasById(Integer ...pizzasId);
+    List<Pizza> getPizzasById(List<Integer> pizzasId);
 
     List<Pizza> getPizzasSortedByPrice();
 

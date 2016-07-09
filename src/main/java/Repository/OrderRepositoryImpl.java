@@ -22,7 +22,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository("orderRepository")
@@ -66,10 +65,13 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
         if (order == null) {
             return false;
         }
-        String sql = "UPDATE orders SET customer_id = :customerId," +
-                " update_date = :update WHERE order_id = :id;";
+        String sql = "UPDATE orders SET customer_id=:customerId, creation_date=:"
+                + "creationDate, update_date=:update, cancelled=:cancelled"
+                + " WHERE order_id = :id;";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("customerId", order.getCustomer().getId())
+                .addValue("creationDate", order.getCreationDate())
+                .addValue("cancelled", order.isCancelled())
                 .addValue("update", order.getUpdateDate())
                 .addValue("id", order.getId());
         Integer updated = new NamedParameterJdbcTemplate(getJdbcTemplate())
@@ -122,7 +124,7 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
     }
 
     private Integer deleteOrderList(Integer orderId) {
-        String sql = "DELETE FROM orders WHERE order_id = ?;";
+        String sql = "DELETE FROM con_order_pizza WHERE order_id = ?;";
         return getJdbcTemplate().update(sql, orderId);
     }
 
@@ -149,15 +151,18 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
         String sql = "SELECT pizza_id FROM con_order_pizza WHERE order_id=?;";
         List<Integer> pizzasId = getJdbcTemplate()
                 .queryForList(sql, new Object[]{orderId}, Integer.class);
-        List<Pizza> pizzas = pizzaRepository
-                .getPizzasById((Integer[])pizzasId.toArray());
-        return pizzas;
+        return pizzaRepository
+                .getPizzasById(pizzasId);
     }
 
     private Integer[] getPizzasIdFromOrder(Order order) {
-        List<Integer> pizzasId = new ArrayList<>();
-        order.getOrderList().forEach(pizza -> pizzasId.add(pizza.getId()));
-        return (Integer[])pizzasId.toArray();
+        List<Pizza> orderList = order.getOrderList();
+        Integer[] pizzasId = new Integer[orderList.size()];
+        int counter = 0;
+        for (Pizza pizza : orderList) {
+            pizzasId[counter++] = pizza.getId();
+        }
+        return pizzasId;
     }
 
 

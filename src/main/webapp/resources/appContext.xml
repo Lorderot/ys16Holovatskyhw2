@@ -35,6 +35,6 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <context:property-placeholder location="jdbc.properties"/>
+    <context:property-placeholder location="resources/jdbc.properties"/>
 
 </beans>

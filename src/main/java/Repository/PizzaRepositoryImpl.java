@@ -15,10 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository("pizzaRepository")
 public class PizzaRepositoryImpl extends JdbcDaoSupport
@@ -31,13 +28,15 @@ public class PizzaRepositoryImpl extends JdbcDaoSupport
         if (pizza == null) {
             return false;
         }
-        String sql = "INSERT into pizzas(name, price, size, type, description) "
-                + "values(:name, :price, :size, :type, :description);";
+        String sql = "INSERT into pizzas(name, price, size, type, available, "
+                + "description) values(:name, :price, :size, :type, "
+                + ":available, :description);";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("name", pizza.getName())
                 .addValue("price", pizza.getPrice())
                 .addValue("size", pizza.getSize().toString())
                 .addValue("type", pizza.getType().toString())
+                .addValue("available", pizza.isAvailable())
                 .addValue("description", pizza.getDescription());
         try {
             new NamedParameterJdbcTemplate(getJdbcTemplate())
@@ -55,12 +54,14 @@ public class PizzaRepositoryImpl extends JdbcDaoSupport
             return false;
         }
         String sql = "UPDATE pizzas SET name=:name, price=:price, size=:size, "
-                + "type=:type, description=:description WHERE pizza_id=:id;";
+                + "type=:type, available=:available, description="
+                + ":description WHERE pizza_id=:id;";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("name", pizza.getName())
                 .addValue("price", pizza.getPrice())
                 .addValue("size", pizza.getSize().toString())
                 .addValue("type", pizza.getType().toString())
+                .addValue("available", pizza.isAvailable())
                 .addValue("description", pizza.getDescription())
                 .addValue("id", pizza.getId());
         Integer updated = new NamedParameterJdbcTemplate(getJdbcTemplate())
@@ -94,10 +95,13 @@ public class PizzaRepositoryImpl extends JdbcDaoSupport
     }
 
     @Override
-    public List<Pizza> getPizzasById(Integer... pizzasId) {
-        String sql = "SELECT * FROM pizzas WHERE pizza_id IN (:ids)";
+    public List<Pizza> getPizzasById(List<Integer> pizzasId) {
+        if (pizzasId.size() == 0) {
+            return new ArrayList<>();
+        }
+        String sql = "SELECT * FROM pizzas WHERE pizza_id IN (:ids);";
         Set<Integer> setOfId = new HashSet<>();
-        setOfId.addAll(Arrays.asList(pizzasId));
+        setOfId.addAll(pizzasId);
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("ids", setOfId);
         return new NamedParameterJdbcTemplate(getJdbcTemplate())

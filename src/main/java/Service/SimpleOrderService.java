@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service("orderService")
@@ -25,7 +26,7 @@ public class SimpleOrderService implements OrderService {
     }
 
     public Order placeNewOrder(Customer customer, Integer ... pizzasID) {
-        List<Pizza> pizzas = pizzaService.getPizzasById(pizzasID);
+        List<Pizza> pizzas = pizzaService.getPizzasById(Arrays.asList(pizzasID));
         Order newOrder = getNewOrder();
         newOrder.setCustomer(customer);
         newOrder.setOrderList(pizzas);

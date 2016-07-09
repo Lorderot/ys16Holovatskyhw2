@@ -70,7 +70,7 @@ public class SimplePizzaService implements PizzaService {
     }
 
     @Override
-    public List<Pizza> getPizzasById(Integer ...pizzasId) {
+    public List<Pizza> getPizzasById(List<Integer> pizzasId) {
         return pizzaRepository.getPizzasById(pizzasId);
     }
 }
