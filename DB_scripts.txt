@@ -1,0 +1,57 @@
+CREATE TABLE public.customers ( 
+	customer_id          serial  NOT NULL,
+	firstname            varchar(100)  NOT NULL,
+	lastname           varchar(100)  NOT NULL,
+	phonenumber          varchar(15)  ,
+	email                varchar(30)  NOT NULL,
+	login                varchar(20)  NOT NULL,
+	password	     text	  NOT NULL,
+	role                 varchar(20)  NOT NULL,
+	address		     varchar(100)  NOT NULL,
+	CONSTRAINT pk_customers PRIMARY KEY ( id )
+ ) 
+
+CREATE TABLE public.pizzas ( 
+	pizza_id             serial  NOT NULL,
+	name                 varchar(100)  NOT NULL,
+	price                float8  NOT NULL,
+	size                 varchar(10)  NOT NULL,
+	type                 varchar(50)  NOT NULL,
+	availablle           bool         NOT NULL,
+	description          text  ,
+	CONSTRAINT pk_pizzas PRIMARY KEY ( id )
+ ) 
+
+CREATE TABLE public.orders ( 
+	order_id             serial  NOT NULL,
+	creation_date        date    NOT NULL,
+	update_date          date,
+	customer_id          integer NOT NULL,
+	calcelled            bool    NOT NULL,
+	CONSTRAINT pk_orders PRIMARY KEY ( id )
+ ) 
+
+CREATE TABLE public.con_order_pizza ( 
+	order_id             integer  NOT NULL,
+	pizza_id             integer  NOT NULL
+ ) 
+
+CREATE INDEX idx_con_order_pizza_0 ON public.con_order_pizza ( pizza_id ) 
+ALTER TABLE public.con_order_pizza ADD CONSTRAINT fk_con_order_pizza_pizzas FOREIGN KEY ( pizza_id ) REFERENCES public.pizzas( pizza_id )    
+CREATE INDEX idx_con_order_pizza ON public.con_order_pizza ( order_id ) 
+ALTER TABLE public.con_order_pizza ADD CONSTRAINT fk_con_order_pizza_orders FOREIGN KEY ( order_id ) REFERENCES public.orders( id )    
+CREATE INDEX idx_orders ON public.orders ( customer_id ) 
+ALTER TABLE public.orders ADD CONSTRAINT fk_orders_customers FOREIGN KEY ( customer_id ) REFERENCES public.customers( customer_id )    
+
+CREATE OR REPLACE FUNCTION UpdateOrderList(order_id INT, pizzas_id INT[]) 
+RETURNS VOID AS 
+$$
+DECLARE
+    id INTEGER;
+BEGIN
+    FOREACH id IN ARRAY pizzas_id LOOP
+	INSERT INTO con_order_pizza(order_id, pizza_id) 
+	values(order_id,id); 
+    END LOOP;	
+END
+$$ LANGUAGE PLPGSQL;
