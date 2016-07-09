@@ -1,30 +1,36 @@
 package Domain;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(scopeName = "prototype")
 public class Pizza {
     public enum PizzaType {
         MEAT, CHEESE, VEGETABLE, EXOTIC, TOMATO, PINEAPPLE, SEA;
     }
+    public enum PizzaSize {
+        S, L, XL, XXL;
+    }
     private Integer id;
     private String name;
     private Double price;
+    private PizzaSize size;
     private PizzaType type;
+    private boolean available;
+    private String description;
 
     public Pizza() {
     }
 
-    public Pizza(Pizza pizza) {
-        this(pizza.id, pizza.name, pizza.price, pizza.type);
-    }
-
-    public Pizza(Integer id, String name) {
-        this.id = id;
+    public Pizza(String name, Double price, PizzaSize size, PizzaType type,
+                 String description, boolean available) {
         this.name = name;
-    }
-
-    public Pizza(int id, String Name, Double price, PizzaType type) {
-        this(id, Name);
         this.price = price;
+        this.size = size;
         this.type = type;
+        this.available = available;
+        this.description = description;
     }
 
     public Integer getId() {
@@ -59,8 +65,33 @@ public class Pizza {
         this.type = type;
     }
 
+    public PizzaSize getSize() {
+        return size;
+    }
+
+    public void setSize(PizzaSize size) {
+        this.size = size;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     @Override
     public String toString() {
-        return "Pizza{" + "id=" + id + ", name=" + name + ", type=" + type + '}';
+        return "Pizza{name=" + name + ", type=" + type
+                + ", size=" + size + ", price=" + price + "}";
     }
 }

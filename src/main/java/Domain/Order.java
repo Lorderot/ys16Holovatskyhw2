@@ -1,49 +1,33 @@
 package Domain;
 
-import Exceptions.NoSuchPizzaException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Component
 @Scope(scopeName = "prototype")
 public class Order {
-    private static int count = 1;
     private Integer id;
-    private Date date;
+    private Date creationDate;
+    private Date updateDate;
     private List<Pizza> orderList;
     private Customer customer;
+    private boolean cancelled;
     private Double totalPrice;
-    private String name;
 
     public Order() {
-        id = count++;
-        this.date = new Date();
-        name = date.toString() + " id = " + id;
+        this.creationDate = new Date();
+        this.cancelled = false;
     }
 
-    public Order(Customer customer, List<Pizza> orderList) {
+    public Order(List<Pizza> orderList, Customer customer) {
         this();
-        this.orderList = makeClone(orderList);
+        this.orderList = orderList;
         this.customer = customer;
         updateTotalPrice();
     }
-    public Order(Order order) {
-        this.id = order.id;
-        this.date = order.date;
-        this.orderList = order.getOrderList();
-        this.customer = new Customer(order.customer);
-        this.totalPrice = order.totalPrice;
-    }
-
-    @Override
-    public String toString() {
-        return customer + "\nOrder{" + name + ", pizzas=" + orderList + '}';
-    }
-
 
     public double getTotalPrice() {
         return totalPrice;
@@ -58,34 +42,28 @@ public class Order {
     }
 
     public void setOrderList(List<Pizza> orderList) {
-        this.orderList = makeClone(orderList);
+        this.orderList = orderList;
         updateTotalPrice();
     }
 
     public void addPizza(Pizza pizza) {
-        if (pizza == null) {
-            throw new NullPointerException();
-        }
-        orderList.add(new Pizza(pizza));
+        orderList.add(pizza);
         totalPrice += pizza.getPrice();
     }
 
-    public void removePizza(Integer pizzaId) throws NoSuchPizzaException {
-        int sizeBeforeRemoving = orderList.size();
+    public Pizza removePizza(Integer pizzaId) {
         for (Pizza pizza : orderList) {
             if (pizza.getId().equals(pizzaId)) {
                 orderList.remove(pizza);
                 totalPrice -= pizza.getPrice();
-                break;
+                return pizza;
             }
         }
-        if (orderList.size() == sizeBeforeRemoving) {
-            throw new NoSuchPizzaException(pizzaId);
-        }
+        return null;
     }
 
     public List<Pizza> getOrderList() {
-        return makeClone(orderList);
+        return orderList;
     }
 
     public Customer getCustomer() {
@@ -96,16 +74,31 @@ public class Order {
         this.customer = customer;
     }
 
-    private void updateTotalPrice() {
-        totalPrice = orderList.stream().mapToDouble(Pizza::getPrice).sum();
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    private List<Pizza> makeClone(List<Pizza> pizzas) {
-        if (pizzas == null) {
-            return null;
-        }
-        List<Pizza> clone = new ArrayList<>(pizzas.size());
-        pizzas.forEach((pizza -> clone.add(new Pizza(pizza))));
-        return clone;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    private void updateTotalPrice() {
+        totalPrice = orderList.stream().mapToDouble(Pizza::getPrice).sum();
     }
 }

@@ -14,4 +14,6 @@ public interface PizzaRepository {
     List<Pizza> getPizzas();
 
     Pizza getPizzaById(Integer id);
+
+    List<Pizza> getPizzasById(Integer ...pizzasId);
 }
