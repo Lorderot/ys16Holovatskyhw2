@@ -1,4 +1,4 @@
-package web;
+package web.Rest;
 
 import Domain.Pizza;
 import Service.PizzaService;

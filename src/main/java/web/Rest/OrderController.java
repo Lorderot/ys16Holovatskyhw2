@@ -1,4 +1,4 @@
-package web;
+package web.Rest;
 
 import Domain.Customer;
 import Domain.Order;
@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/rest/*")
 public class OrderController {
 
     @Autowired
