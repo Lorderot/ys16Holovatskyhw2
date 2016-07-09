@@ -14,4 +14,6 @@ public interface CustomerRepository {
     List<Customer> getCustomers();
 
     Customer getCustomerById(Integer customerId);
+
+    Customer getCustomerByLogin(String login);
 }

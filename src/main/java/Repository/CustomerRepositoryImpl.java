@@ -98,6 +98,18 @@ public class CustomerRepositoryImpl extends JdbcDaoSupport
     }
 
     @Override
+    public Customer getCustomerByLogin(String login) {
+        String sql = "SELECT * FROM customers WHERE login=?";
+        try {
+            return getJdbcTemplate().queryForObject(
+                    sql, new Object[]{login}, customerMapper);
+        } catch (EmptyResultDataAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
     }
