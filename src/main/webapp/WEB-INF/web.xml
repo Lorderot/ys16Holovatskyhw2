@@ -5,26 +5,12 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/resources/appContext.xml</param-value>
+        <param-value>/resources/appContext.xml, WEB-INF/webContext.xml</param-value>
     </context-param>
     
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-
-    <servlet>
-        <servlet-name>SimpleServlet</servlet-name>
-        <servlet-class>web.SimpleServlet</servlet-class>
-    </servlet>
-
-    <servlet>
-        <servlet-name>PizzaServlet</servlet-name>
-        <servlet-class>web.PizzaServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/web.xml</param-value>
-        </init-param>
-    </servlet>
 
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
@@ -38,20 +24,17 @@
     
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>SimpleServlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
 
-    <servlet-mapping>
-        <servlet-name>PizzaServlet</servlet-name>
-        <url-pattern>/pizza</url-pattern>
-    </servlet-mapping>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
 </web-app>
