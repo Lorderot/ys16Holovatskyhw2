@@ -13,9 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    public UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
     @Autowired
-    public PasswordEncoder encoder;
+    private PasswordEncoder encoder;
+    @Autowired
+    private CustomSuccessHandler successHandler;
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder authentication)
@@ -26,10 +28,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http.authorizeRequests().antMatchers("/admin*//**")
-                .access("hasRole('ADMIN')")
-                .antMatchers("/user*//**").access("hasRole('USER')")
-                .and().formLogin();*/
-        http.authorizeRequests().antMatchers("/login").permitAll().and().formLogin();
+        http.authorizeRequests().antMatchers("/login").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
+                .and().formLogin().loginPage("/login").successHandler(successHandler)
+                .usernameParameter("login").passwordParameter("password").and().csrf();
     }
 }

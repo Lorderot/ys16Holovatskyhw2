@@ -25,8 +25,8 @@ public class CustomerDetailsService implements UserDetailsService {
         if (customer == null) {
             throw new UsernameNotFoundException("Register, please!");
         }
-        GrantedAuthority authority = new SimpleGrantedAuthority(
-                customer.getRole().toString());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"
+                + customer.getRole().toString());
         return new User(customer.getLogin(), customer.getPassword(),
                 true, true, true, true, Arrays.asList(authority));
     }

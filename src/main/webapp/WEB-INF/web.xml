@@ -5,7 +5,7 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/resources/appContext.xml, WEB-INF/webContext.xml</param-value>
+        <param-value>classpath*:appContext.xml, WEB-INF/webContext.xml</param-value>
     </context-param>
     
     <listener>
@@ -36,5 +36,4 @@
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 </web-app>
