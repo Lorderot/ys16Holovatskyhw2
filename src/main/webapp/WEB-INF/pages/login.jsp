@@ -44,6 +44,7 @@
                         <input type="submit"
                                class="btn btn-block btn-primary btn-default" value="Sign In">
                     </div>
+                    <a href="/PizzaService/register" class="alert-link">register?</a>
                 </form>
             </div>
         </div>
