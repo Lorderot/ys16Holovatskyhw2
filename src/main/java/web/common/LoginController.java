@@ -28,12 +28,14 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute Customer customer) {
+    public String registerUser(@ModelAttribute Customer customer,
+                               ModelMap modelMap) {
         customer.setRole(Customer.Role.valueOf("USER"));
-        try {
-            customerService.registerCustomer(customer);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!customerService.registerCustomer(customer)) {
+            if (customerService.findCustomerByLogin(
+                    customer.getLogin()) != null) {
+                modelMap.put("error", "Such login already exists");
+            }
             return "register";
         }
         return "login";

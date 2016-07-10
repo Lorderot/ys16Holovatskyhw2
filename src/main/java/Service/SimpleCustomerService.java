@@ -31,7 +31,7 @@ public class SimpleCustomerService implements CustomerService, ApplicationContex
 
     @Override
     public Customer findCustomerByLogin(String login) {
-        throw new UnsupportedOperationException();
+        return customerRepository.getCustomerByLogin(login);
     }
 
     @Override

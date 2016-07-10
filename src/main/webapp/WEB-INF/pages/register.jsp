@@ -28,6 +28,11 @@
                 <form:label path="login">Username</form:label>
                 <form:input path="login" type="text" class="form-control"
                             required="required"/>
+                <c:if test="${error != null}">
+                    <div class="alert alert-danger">
+                        <p>${error}</p>
+                    </div>
+                </c:if>
                 <form:errors path="login" cssClass="text-warning" />
             </fieldset>
             <fieldset class="form-group">
