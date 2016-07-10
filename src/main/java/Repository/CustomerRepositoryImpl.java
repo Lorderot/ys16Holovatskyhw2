@@ -81,7 +81,7 @@ public class CustomerRepositoryImpl extends JdbcDaoSupport
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("firstName", customer.getFirstName())
                 .addValue("lastName", customer.getLastName())
-                .addValue("phoneNumber", customer.getPhoneNumber())
+                .addValue("phone", customer.getPhoneNumber())
                 .addValue("email", customer.getEmail())
                 .addValue("login", customer.getLogin())
                 .addValue("password", customer.getPassword())
