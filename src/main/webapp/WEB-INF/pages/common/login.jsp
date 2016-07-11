@@ -4,9 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Login page</title>
-    <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"></link>
-    <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"></link>
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+    <link href="<c:url value='/resources/css/bootstrap.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/resources/css/app.css' />" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -44,7 +44,7 @@
                         <input type="submit"
                                class="btn btn-block btn-primary btn-default" value="Sign In">
                     </div>
-                    <a href="/PizzaService/register" class="alert-link">register?</a>
+                    <a href="<c:url value='/register'/>" class="alert-link">register?</a>
                 </form>
             </div>
         </div>

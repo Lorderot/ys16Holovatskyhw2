@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping(value = "/user")
 public class UserController {
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String showMainPage() {
-        return "user";
+        return "user/welcome";
     }
 }
