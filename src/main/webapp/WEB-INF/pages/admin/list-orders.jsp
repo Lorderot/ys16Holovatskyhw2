@@ -33,14 +33,10 @@
                 </td>
                 <td>${order.totalPrice}</td>
                 <td>
-                    <form name="submitForm" method="GET"
-                          action="<c:url value='/admin/orderList?orderId=${order.id}'/>">
-                        <button type="submit" class="btn btn-primary">Show order list</button>
-                    </form>
-                    <form name="submitForm" method="POST"
-                          action="<c:url value='/admin/completeOrder?orderId=${order.id}'/>">
-                        <button type="submit" class="btn btn-success">Done</button>
-                    </form>
+                    <a type="button" class="btn btn-primary"
+                       href="<c:url value='/admin/orderList?orderId=${order.id}'/>">Show order list</a>
+                    <a type="button" class="btn btn-success"
+                       href="<c:url value='/admin/completeOrder?orderId=${order.id}'/>">Done</a>
                 </td>
             </tr>
         </c:forEach>
