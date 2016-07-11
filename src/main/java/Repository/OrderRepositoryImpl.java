@@ -66,13 +66,14 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
             return false;
         }
         String sql = "UPDATE orders SET customer_id=:customerId, creation_date=:"
-                + "creationDate, update_date=:update, cancelled=:cancelled"
-                + " WHERE order_id = :id;";
+                + "creationDate, update_date=:update, cancelled=:cancelled, "
+                + "finish_date=:finish WHERE order_id = :id;";
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("customerId", order.getCustomer().getId())
                 .addValue("creationDate", order.getCreationDate())
                 .addValue("cancelled", order.isCancelled())
                 .addValue("update", order.getUpdateDate())
+                .addValue("finish", order.getFinishDate())
                 .addValue("id", order.getId());
         Integer updated = new NamedParameterJdbcTemplate(getJdbcTemplate())
                 .update(sql, sqlParameterSource);

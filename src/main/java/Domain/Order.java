@@ -12,6 +12,7 @@ public class Order {
     private Integer id;
     private Date creationDate;
     private Date updateDate;
+    private Date finishDate;
     private List<Pizza> orderList;
     private Customer customer;
     private boolean cancelled;
@@ -96,6 +97,14 @@ public class Order {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 
     private void updateTotalPrice() {
