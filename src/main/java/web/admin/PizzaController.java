@@ -3,7 +3,6 @@ package web.admin;
 import Domain.Customer;
 import Domain.Pizza;
 import Service.CustomerService;
-import Service.OrderService;
 import Service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,13 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/admin")
-public class AdminController {
+public class PizzaController {
     @Autowired
     private CustomerService customerService;
     @Autowired
     private PizzaService pizzaService;
-    @Autowired
-    private OrderService orderService;
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String showMainPage(ModelMap modelMap) {
@@ -39,8 +36,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/update-pizza", method = RequestMethod.GET)
-    public String showPizzaForm(ModelMap modelMap,
-                                      @RequestParam Integer pizzaId) {
+    public String showPizzaForm(
+            ModelMap modelMap, @RequestParam Integer pizzaId) {
         modelMap.addAttribute("pizza", pizzaService.getPizzaById(pizzaId));
         return "admin/addPizzaForm";
     }
@@ -59,7 +56,9 @@ public class AdminController {
 
     @RequestMapping(value = "/add-pizza", method = RequestMethod.GET)
     public String showPizzaForm(ModelMap modelMap) {
-        modelMap.addAttribute(pizzaService.getNewPizza());
+        Pizza pizza = pizzaService.getNewPizza();
+        pizza.setId(-1);
+        modelMap.addAttribute(pizza);
         return "admin/addPizzaForm";
     }
 
@@ -71,10 +70,6 @@ public class AdminController {
 
     public void setPizzaService(PizzaService pizzaService) {
         this.pizzaService = pizzaService;
-    }
-
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
     }
 
     public void setCustomerService(CustomerService customerService) {

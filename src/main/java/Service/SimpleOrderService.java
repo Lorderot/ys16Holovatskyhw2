@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("orderService")
 public class SimpleOrderService implements OrderService {
@@ -84,7 +82,7 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Override
-    public void orderHasBeenDone(Integer orderId) {
+    public void completeOrder(Integer orderId) {
         Order order = orderRepository.getOrderById(orderId);
         order.setFinishDate(new Date());
         orderRepository.update(order);
@@ -95,6 +93,32 @@ public class SimpleOrderService implements OrderService {
         Order order = orderRepository.getOrderById(orderId);
         order.setCancelled(true);
         return orderRepository.update(order);
+    }
+
+    @Override
+    public List<Order> getUndoneOrdersSortedByDate() {
+        List<Order> orderList = orderRepository.getUndoneOrders();
+        Collections.sort(orderList, (order1, order2) -> {
+            if (order1 == null && order2 == null) {
+                return 0;
+            }
+            if (order1 == null) {
+                return -1;
+            }
+            if (order2 == null) {
+                return 1;
+            }
+            long date1 = order1.getCreationDate().getTime();
+            long date2 = order2.getCreationDate().getTime();
+            if (date1 > date2) {
+                return -1;
+            }
+            if (date1 == date2) {
+                return 0;
+            }
+            return 1;
+        });
+        return orderList;
     }
 
     public PizzaService getPizzaService() {

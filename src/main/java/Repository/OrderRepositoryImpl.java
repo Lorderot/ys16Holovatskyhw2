@@ -107,6 +107,13 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
     }
 
     @Override
+    public List<Order> getUndoneOrders() {
+        String sql = "SELECT * FROM orders WHERE cancelled!=TRUE"
+                + " AND finish_date IS NULL;";
+        return getJdbcTemplate().query(sql, orderMapper);
+    }
+
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
     }

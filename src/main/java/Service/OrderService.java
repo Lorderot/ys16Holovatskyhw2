@@ -10,6 +10,8 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
+    List<Order> getUndoneOrdersSortedByDate();
+
     Order placeNewOrder(Customer customer, Integer... pizzasID);
 
     Order addPizzaToOrder(Integer orderId, Integer pizzaId);
@@ -24,5 +26,5 @@ public interface OrderService {
 
     boolean cancelOrder(Integer orderId);
 
-    void orderHasBeenDone(Integer orderId);
+    void completeOrder(Integer orderId);
 }
