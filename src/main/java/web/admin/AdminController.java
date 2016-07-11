@@ -25,7 +25,8 @@ public class AdminController {
     private OrderService orderService;
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String showMainPage() {
+    public String showMainPage(ModelMap modelMap) {
+        modelMap.addAttribute("customer", getLoggedInCustomer());
         return "admin/welcome";
     }
 
