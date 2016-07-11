@@ -19,6 +19,8 @@ public interface PizzaService {
 
     Pizza updatePizzaPriceById(Integer pizzaId, Double price);
 
+    boolean updatePizza(Pizza pizza);
+
     boolean addPizza(Pizza pizza);
 
     boolean deletePizza(Integer pizzaId);

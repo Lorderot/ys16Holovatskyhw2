@@ -71,7 +71,7 @@ public class PizzaRepositoryImpl extends JdbcDaoSupport
 
     @Override
     public boolean delete(Integer pizzaId) {
-        String sql = "UPDATE pizzas set available=false WHERE pizza_id=?";
+        String sql = "UPDATE pizzas set deleted=true WHERE pizza_id=?";
         Integer deleted = getJdbcTemplate().update(sql, pizzaId);
         return !deleted.equals(0);
     }
@@ -90,7 +90,7 @@ public class PizzaRepositoryImpl extends JdbcDaoSupport
 
     @Override
     public List<Pizza> getPizzas() {
-        String sql = "SELECT * FROM pizzas;";
+        String sql = "SELECT * FROM pizzas WHERE deleted=false;";
         return getJdbcTemplate().query(sql, pizzaMapper);
     }
 

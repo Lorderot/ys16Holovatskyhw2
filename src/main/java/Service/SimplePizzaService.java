@@ -77,8 +77,11 @@ public class SimplePizzaService implements PizzaService {
 
     @Override
     public boolean deletePizza(Integer pizzaId) {
-        Pizza pizza = pizzaRepository.getPizzaById(pizzaId);
-        pizza.setAvailable(false);
+        return pizzaRepository.delete(pizzaId);
+    }
+
+    @Override
+    public boolean updatePizza(Pizza pizza) {
         return pizzaRepository.update(pizza);
     }
 
