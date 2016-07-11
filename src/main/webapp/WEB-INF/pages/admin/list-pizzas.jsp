@@ -1,26 +1,13 @@
-<%@include file="header.jsp"%>
+<%@include file="header.jspf"%>
     <title>Pizza Repository</title>
 </head>
 
 <body>
 
-<nav role="navigation" class="navbar navbar-default">
-
-    <div class="navbar-collapse">
-        <ul class="nav navbar-nav">
-            <li><a href="<c:url value='/admin/welcome'/>">Home</a></li>
-            <li><a href="<c:url value='/admin/list-pizzas'/>">Pizza Repository</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="<c:url value='/logout'/>">Logout</a></li>
-        </ul>
-    </div>
-
-</nav>
+<%@include file="navigation.jspf"%>
 
 <div class="container">
     <table class="table table-striped">
-        <caption>Pizza Repository</caption>
         <thead>
         <tr>
             <th>Name</th>
@@ -56,6 +43,4 @@
     </div>
 </div>
 
-</body>
-
-<%@include file="footer.jsp"%>
+<%@include file="footer.jspf"%>

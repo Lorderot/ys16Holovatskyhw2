@@ -1,6 +1,7 @@
 package web.admin;
 
 import Domain.Customer;
+import Domain.Pizza;
 import Service.CustomerService;
 import Service.OrderService;
 import Service.PizzaService;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,9 +51,16 @@ public class AdminController {
         return "redirect:/list-pizzas";
     }
 
-    @RequestMapping(value = "/add-pizza")
-    public String showAddPizzaPage() {
-        return "";
+    @RequestMapping(value = "/add-pizza", method = RequestMethod.GET)
+    public String showPizzaForm(ModelMap modelMap) {
+        modelMap.addAttribute(pizzaService.getNewPizza());
+        return "admin/addPizzaForm";
+    }
+
+    @RequestMapping(value = "/add-pizza", method = RequestMethod.POST)
+    public String addPizza(@ModelAttribute Pizza pizza) {
+        pizzaService.addPizza(pizza);
+        return "redirect:/admin/list-pizzas";
     }
 
     public void setPizzaService(PizzaService pizzaService) {
