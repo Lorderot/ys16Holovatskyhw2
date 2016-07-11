@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service("orderService")
@@ -82,6 +83,20 @@ public class SimpleOrderService implements OrderService {
         return orderRepository.getOrderById(id);
     }
 
+    @Override
+    public void orderHasBeenDone(Integer orderId) {
+        Order order = orderRepository.getOrderById(orderId);
+        order.setFinishDate(new Date());
+        orderRepository.update(order);
+    }
+
+    @Override
+    public boolean cancelOrder(Integer orderId) {
+        Order order = orderRepository.getOrderById(orderId);
+        order.setCancelled(true);
+        return orderRepository.update(order);
+    }
+
     public PizzaService getPizzaService() {
         return pizzaService;
     }
@@ -99,7 +114,7 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Lookup
-    protected Order getNewOrder(){
+    public Order getNewOrder(){
         return null;
     }
 }

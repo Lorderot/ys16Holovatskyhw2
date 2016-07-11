@@ -3,6 +3,7 @@ package Service;
 import Domain.Pizza;
 import Repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +73,17 @@ public class SimplePizzaService implements PizzaService {
     @Override
     public List<Pizza> getPizzasById(List<Integer> pizzasId) {
         return pizzaRepository.getPizzasById(pizzasId);
+    }
+
+    @Override
+    public boolean deletePizza(Integer pizzaId) {
+        Pizza pizza = pizzaRepository.getPizzaById(pizzaId);
+        pizza.setAvailable(false);
+        return pizzaRepository.update(pizza);
+    }
+
+    @Lookup
+    public Pizza getNewPizza() {
+        return null;
     }
 }
