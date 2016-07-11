@@ -26,14 +26,15 @@ public class OrderController {
             ModelMap modelMap, @RequestParam Integer orderId) {
         Order order = orderService.getOrderById(orderId);
         modelMap.addAttribute("pizzas", order.getOrderList());
-        return "admin/list-pizzas";
+        return "admin/showOrderList";
     }
 
-    @RequestMapping(value = "/completeOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/completeOrder", method = RequestMethod.GET)
     public String completeOrder(@RequestParam Integer orderId) {
         orderService.completeOrder(orderId);
         return "redirect:/admin/list-orders";
     }
+
 
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;

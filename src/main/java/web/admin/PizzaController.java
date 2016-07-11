@@ -32,14 +32,14 @@ public class PizzaController {
     @RequestMapping(value = "/list-pizzas", method = RequestMethod.GET)
     public String showPizzasList(ModelMap modelMap) {
         modelMap.addAttribute("pizzas", pizzaService.getPizzasSortedByPrice());
-        return "admin/list-pizzas";
+        return "admin/pizzaRepositoryHandler";
     }
 
     @RequestMapping(value = "/update-pizza", method = RequestMethod.GET)
     public String showPizzaForm(
             ModelMap modelMap, @RequestParam Integer pizzaId) {
         modelMap.addAttribute("pizza", pizzaService.getPizzaById(pizzaId));
-        return "admin/addPizzaForm";
+        return "admin/pizzaForm";
     }
 
     @RequestMapping(value = "/update-pizza", method = RequestMethod.POST)
@@ -59,7 +59,7 @@ public class PizzaController {
         Pizza pizza = pizzaService.getNewPizza();
         pizza.setId(-1);
         modelMap.addAttribute(pizza);
-        return "admin/addPizzaForm";
+        return "admin/pizzaForm";
     }
 
     @RequestMapping(value = "/add-pizza", method = RequestMethod.POST)
