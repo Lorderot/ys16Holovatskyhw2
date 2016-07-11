@@ -4,6 +4,7 @@
 
 <div class="container">
     <form:form method="post" commandName="pizza">
+        <form:hidden path="id" />
         <fieldset class="form-group">
             <form:label path="name">Name</form:label>
             <form:input path="name" type="text" class="form-control"
@@ -50,7 +51,7 @@
             <form:input path="description" type="text" class="form-control"/>
             <form:errors path="description" cssClass="text-warning" />
         </fieldset>
-        <button type="submit" class="btn btn-success">Add</button>
+        <button type="submit" class="btn btn-success">Submit</button>
     </form:form>
 </div>
 

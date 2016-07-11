@@ -34,21 +34,27 @@ public class AdminController {
 
     @RequestMapping(value = "/list-pizzas", method = RequestMethod.GET)
     public String showPizzasList(ModelMap modelMap) {
-        modelMap.addAttribute("pizzas", pizzaService.getAllPizzas());
+        modelMap.addAttribute("pizzas", pizzaService.getPizzasSortedByPrice());
         return "admin/list-pizzas";
     }
 
-    @RequestMapping(value = "/update-pizza")
-    public String showUpdatePizzaPage(ModelMap modelMap,
+    @RequestMapping(value = "/update-pizza", method = RequestMethod.GET)
+    public String showPizzaForm(ModelMap modelMap,
                                       @RequestParam Integer pizzaId) {
         modelMap.addAttribute("pizza", pizzaService.getPizzaById(pizzaId));
-        return "";
+        return "admin/addPizzaForm";
+    }
+
+    @RequestMapping(value = "/update-pizza", method = RequestMethod.POST)
+    public String showUpdatePizzaPage(@ModelAttribute Pizza pizza) {
+        pizzaService.updatePizza(pizza);
+        return "redirect:/admin/list-pizzas";
     }
 
     @RequestMapping(value = "/delete-pizza")
     public String deletePizza(@RequestParam Integer pizzaId) {
         pizzaService.deletePizza(pizzaId);
-        return "redirect:/list-pizzas";
+        return "redirect:/admin/list-pizzas";
     }
 
     @RequestMapping(value = "/add-pizza", method = RequestMethod.GET)
