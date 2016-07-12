@@ -28,7 +28,7 @@
                 <td>${order.customer.address}</td>
                 <td>${order.customer.email}</td>
                 <td>
-                    <fmt:formatDate pattern="dd/MM/yyyy"
+                    <fmt:formatDate pattern="dd/MM/yyyy hh:mm"
                         value="${order.creationDate}"/>
                 </td>
                 <td>${order.totalPrice}</td>
