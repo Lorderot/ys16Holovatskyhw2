@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface OrderRepository {
 
-    boolean create(Order order);
+    Order create(Order order);
 
     boolean update(Order order);
 

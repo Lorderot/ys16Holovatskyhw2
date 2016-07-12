@@ -34,11 +34,11 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
     private CustomerRepository customerRepository;
     private OrderMapper orderMapper = new OrderMapper();
 
-    public boolean create(Order order) {
+    public Order create(Order order) {
         if (order == null) {
-            return false;
+            return null;
         }
-        String sql = "INSERT INTO orders(creation_date, customer_id) VALUES(?,?)";
+        String sql = "INSERT INTO orders(creation_date, customer_id, cancelled) VALUES(?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             getJdbcTemplate().update(new PreparedStatementCreator() {
@@ -46,8 +46,9 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement statement = connection.prepareStatement(
                             sql, new String[]{"order_id"});
-                    statement.setDate(1, new Date(order.getCreationDate().getTime()));
+                    statement.setTimestamp(1, new Timestamp(order.getCreationDate().getTime()));
                     statement.setInt(2, order.getCustomer().getId());
+                    statement.setBoolean(3, order.isCancelled());
                     return statement;
                 }
             }, keyHolder);
@@ -55,9 +56,9 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
             addOrderList(order.getId(), getPizzasIdFromOrder(order));
         } catch (DataAccessException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
-        return true;
+        return order;
     }
 
     @Override
@@ -190,8 +191,9 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
             Customer customer = customerRepository
                     .getCustomerById(resultSet.getInt("customer_id"));
             order.setCustomer(customer);
-            order.setCreationDate(resultSet.getDate("creation_date"));
-            order.setUpdateDate(resultSet.getDate("update_date"));
+            order.setCreationDate(resultSet.getTimestamp("creation_date"));
+            order.setFinishDate(resultSet.getTimestamp("finish_date"));
+            order.setUpdateDate(resultSet.getTimestamp("update_date"));
             order.setOrderList(getOrderListById(order.getId()));
             return order;
         }
