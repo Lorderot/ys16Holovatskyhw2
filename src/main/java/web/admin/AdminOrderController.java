@@ -17,7 +17,8 @@ public class AdminOrderController {
 
     @RequestMapping(value = "/list-orders", method = RequestMethod.GET)
     public String showListOfOrders(ModelMap modelMap) {
-        modelMap.addAttribute("orders", orderService.getUndoneOrdersSortedByDate());
+        modelMap.addAttribute("orders", orderService
+                .sortOrderListByDate(orderService.getUndoneOrders()));
         return "admin/list-orders";
     }
 
