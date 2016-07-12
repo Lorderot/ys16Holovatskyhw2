@@ -33,5 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasRole("USER")
                 .and().formLogin().loginPage("/login").successHandler(successHandler)
                 .usernameParameter("login").passwordParameter("password").and().csrf();
+        http.csrf().disable();
     }
 }
