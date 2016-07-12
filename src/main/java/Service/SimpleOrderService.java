@@ -96,6 +96,11 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Override
+    public List<Order> getOrdersByCustomerId(Integer customerId) {
+        return orderRepository.getOrdersByCustomerId(customerId);
+    }
+
+    @Override
     public List<Order> getUndoneOrdersSortedByDate() {
         List<Order> orderList = orderRepository.getUndoneOrders();
         Collections.sort(orderList, (order1, order2) -> {

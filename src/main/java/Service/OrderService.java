@@ -12,6 +12,8 @@ public interface OrderService {
 
     List<Order> getUndoneOrdersSortedByDate();
 
+    List<Order> getOrdersByCustomerId(Integer customerId);
+
     Order placeNewOrder(Customer customer, Integer... pizzasID);
 
     Order addPizzaToOrder(Integer orderId, Integer pizzaId);

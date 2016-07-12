@@ -114,6 +114,14 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
     }
 
     @Override
+    public List<Order> getOrdersByCustomerId(Integer customerId) {
+        String sql = "SELECT * FROM orders WHERE cancelled!=TRUE"
+                + " AND customer_id=?";
+        return getJdbcTemplate()
+                .query(sql, new Object[]{customerId}, orderMapper);
+    }
+
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
     }

@@ -16,5 +16,7 @@ public interface OrderRepository {
 
     List<Order> getUndoneOrders();
 
+    List<Order> getOrdersByCustomerId(Integer customerId);
+
     Order getOrderById(Integer id);
 }
