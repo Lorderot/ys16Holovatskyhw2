@@ -46,7 +46,11 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement statement = connection.prepareStatement(
                             sql, new String[]{"order_id"});
-                    statement.setTimestamp(1, new Timestamp(order.getCreationDate().getTime()));
+                    if (order.getCreationDate() != null) {
+                        statement.setTimestamp(1, new Timestamp(order.getCreationDate().getTime()));
+                    } else {
+                        statement.setTimestamp(1, null);
+                    }
                     statement.setInt(2, order.getCustomer().getId());
                     statement.setBoolean(3, order.isCancelled());
                     return statement;
@@ -90,8 +94,9 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
     }
 
     @Override
-    public List<Order> getOrders() {
-        String sql = "SELECT * FROM orders WHERE cancelled!=TRUE;";
+    public List<Order> getFinishedOrders() {
+        String sql = "SELECT * FROM orders WHERE creation_date " +
+                "IS NOT NULL cancelled!=TRUE;";
         return getJdbcTemplate().query(sql, orderMapper);
     }
 
@@ -109,17 +114,30 @@ public class OrderRepositoryImpl extends JdbcDaoSupport
 
     @Override
     public List<Order> getUndoneOrders() {
-        String sql = "SELECT * FROM orders WHERE cancelled!=TRUE"
-                + " AND finish_date IS NULL;";
+        String sql = "SELECT * FROM orders WHERE creation_date " +
+                "IS NOT NULL AND cancelled!=TRUE AND finish_date IS NULL;";
         return getJdbcTemplate().query(sql, orderMapper);
     }
 
     @Override
-    public List<Order> getOrdersByCustomerId(Integer customerId) {
-        String sql = "SELECT * FROM orders WHERE cancelled!=TRUE"
-                + " AND customer_id=?";
+    public List<Order> getFinishedOrdersByCustomerId(Integer customerId) {
+        String sql = "SELECT * FROM orders WHERE creation_date IS NOT NULL" +
+                " AND cancelled!=TRUE AND customer_id=?";
         return getJdbcTemplate()
                 .query(sql, new Object[]{customerId}, orderMapper);
+    }
+
+    @Override
+    public Order getUnfinishedOrder(Integer customerId) {
+        String sql = "SELECT * FROM orders " +
+                "WHERE creation_date IS NULL AND customer_id=?;";
+        try {
+            return getJdbcTemplate().queryForObject(
+                    sql, new Object[]{customerId}, orderMapper);
+        } catch (EmptyResultDataAccessException e) {
+            System.err.println("empty result set. Customer_id = " + customerId);
+        }
+        return null;
     }
 
     @Override

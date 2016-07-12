@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -29,8 +28,6 @@ public class UserPizzaController {
     private CustomerService customerService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private Order order;
     private List<Pizza> pizzaMenu;
 
     @PostConstruct
@@ -40,26 +37,30 @@ public class UserPizzaController {
 
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String showMainPage(ModelMap modelMap) {
-        order.setCustomer(getLoggedInCustomer());
         modelMap.addAttribute("customer", getLoggedInCustomer());
         return "user/welcome";
     }
 
     @RequestMapping(value = "/create-order")
     public String createOrder() {
-        if (order.getOrderList().isEmpty()) {
+        Order order = orderService
+                .getUnfinishedOrder(getLoggedInCustomer().getId());
+        if (order == null) {
             return "redirect:/user/list-pizzas";
         }
-        List<Pizza> newPizzaList = new ArrayList<>();
-        order.getOrderList().forEach(newPizzaList::add);
-        order.setOrderList(newPizzaList);
-        orderService.addOrder(order);
-        order.clear();
+        orderService.finishOrder(order);
         return "redirect:/user/list-orders";
     }
 
     @RequestMapping(value = "/list-pizzas", method = RequestMethod.GET)
     public String showPizzasMenu(ModelMap modelMap) {
+        Order order = orderService.getUnfinishedOrder(
+                getLoggedInCustomer().getId());
+        if (order == null) {
+            order = orderService.getNewOrder();
+            order.setCustomer(getLoggedInCustomer());
+            orderService.addUnfinishedOrder(order);
+        }
         modelMap.addAttribute("totalPrice", order.getTotalPrice());
         modelMap.addAttribute("pizzas", pizzaMenu);
         modelMap.addAttribute("orderList", order.getOrderList());
@@ -69,13 +70,19 @@ public class UserPizzaController {
     @RequestMapping(value = "/list-pizzas", method = RequestMethod.POST)
     public String addPizzaToOrder(@RequestParam Integer pizzaId) {
         Pizza pizza = pizzaService.getPizzaById(pizzaId);
+        Order order = orderService.getUnfinishedOrder(
+                getLoggedInCustomer().getId());
         order.addPizza(pizza);
+        orderService.updateOrder(order);
         return "redirect:/user/list-pizzas";
     }
 
     @RequestMapping(value = "/delete-pizza", method = RequestMethod.POST)
     public String deletePizzaFromOrder(@RequestParam Integer pizzaId) {
+        Order order = orderService.getUnfinishedOrder(
+                getLoggedInCustomer().getId());
         order.removePizza(pizzaId);
+        orderService.updateOrder(order);
         return "redirect:/user/list-pizzas";
     }
 
@@ -89,10 +96,6 @@ public class UserPizzaController {
 
     public void setOrderService(OrderService orderService) {
         this.orderService = orderService;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     private Customer getLoggedInCustomer() {

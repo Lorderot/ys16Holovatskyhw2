@@ -12,11 +12,13 @@ public interface OrderRepository {
 
     boolean delete(Integer orderId);
 
-    List<Order> getOrders();
+    List<Order> getFinishedOrders();
 
     List<Order> getUndoneOrders();
 
-    List<Order> getOrdersByCustomerId(Integer customerId);
+    List<Order> getFinishedOrdersByCustomerId(Integer customerId);
 
     Order getOrderById(Integer id);
+
+    Order getUnfinishedOrder(Integer customerId);
 }

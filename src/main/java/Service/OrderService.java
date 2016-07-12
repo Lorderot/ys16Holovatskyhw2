@@ -28,6 +28,12 @@ public interface OrderService {
 
     Order addOrder(Order order);
 
+    Order getUnfinishedOrder(Integer customerId);
+
+    Order addUnfinishedOrder(Order order);
+
+    boolean finishOrder(Order order);
+
     boolean cancelOrder(Integer orderId);
 
     void completeOrder(Integer orderId);

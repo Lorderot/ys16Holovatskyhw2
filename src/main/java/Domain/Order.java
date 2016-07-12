@@ -20,7 +20,6 @@ public class Order {
     private Double totalPrice;
 
     public Order() {
-        this.creationDate = new Date();
         this.cancelled = false;
         this.orderList = new ArrayList<>();
         totalPrice = 0.0;

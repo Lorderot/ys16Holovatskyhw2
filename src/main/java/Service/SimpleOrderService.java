@@ -35,7 +35,7 @@ public class SimpleOrderService implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return orderRepository.getOrders();
+        return orderRepository.getFinishedOrders();
     }
 
     @Override
@@ -98,12 +98,28 @@ public class SimpleOrderService implements OrderService {
 
     @Override
     public List<Order> getOrdersByCustomerId(Integer customerId) {
-        return orderRepository.getOrdersByCustomerId(customerId);
+        return orderRepository.getFinishedOrdersByCustomerId(customerId);
+    }
+
+    @Override
+    public Order getUnfinishedOrder(Integer customerId) {
+        return orderRepository.getUnfinishedOrder(customerId);
+    }
+
+    @Override
+    public Order addUnfinishedOrder(Order order) {
+        return orderRepository.create(order);
     }
 
     @Override
     public List<Order> getUndoneOrders() {
         return orderRepository.getUndoneOrders();
+    }
+
+    @Override
+    public boolean finishOrder(Order order) {
+        order.setCreationDate(new Date());
+        return orderRepository.update(order);
     }
 
     @Override
