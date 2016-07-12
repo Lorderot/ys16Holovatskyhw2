@@ -1,10 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>User</title>
-    HELLO
+    <%@include file="../common/header.jspf"%>
+    <title>Welcome</title>
 </head>
+
 <body>
 
-</body>
-</html>
+<%@include file="navigation.jspf"%>
+
+    Welcome, ${customer.firstName} ${customer.lastName}!
+
+<%@include file="../common/footer.jspf"%>
