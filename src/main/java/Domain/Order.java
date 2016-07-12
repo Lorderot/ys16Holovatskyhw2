@@ -3,6 +3,7 @@ package Domain;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class Order {
     public Order() {
         this.creationDate = new Date();
         this.cancelled = false;
+        this.orderList = new ArrayList<>();
+        totalPrice = 0.0;
     }
 
     public Order(List<Pizza> orderList, Customer customer) {
@@ -65,6 +68,11 @@ public class Order {
 
     public List<Pizza> getOrderList() {
         return orderList;
+    }
+
+    public void clear() {
+        orderList.clear();
+        updateTotalPrice();
     }
 
     public Customer getCustomer() {
