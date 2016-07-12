@@ -72,7 +72,8 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Override
-    public boolean addOrder(Order order) {
+    public Order addOrder(Order order) {
+        order.setCreationDate(new Date());
         return orderRepository.create(order);
     }
 
@@ -101,8 +102,12 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Override
-    public List<Order> getUndoneOrdersSortedByDate() {
-        List<Order> orderList = orderRepository.getUndoneOrders();
+    public List<Order> getUndoneOrders() {
+        return orderRepository.getUndoneOrders();
+    }
+
+    @Override
+    public List<Order> sortOrderListByDate(List<Order> orderList) {
         Collections.sort(orderList, (order1, order2) -> {
             if (order1 == null && order2 == null) {
                 return 0;

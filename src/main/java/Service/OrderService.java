@@ -10,7 +10,7 @@ public interface OrderService {
 
     List<Order> getAllOrders();
 
-    List<Order> getUndoneOrdersSortedByDate();
+    List<Order> getUndoneOrders();
 
     List<Order> getOrdersByCustomerId(Integer customerId);
 
@@ -24,7 +24,9 @@ public interface OrderService {
 
     void updateOrder(Order order);
 
-    boolean addOrder(Order order);
+    public List<Order> sortOrderListByDate(List<Order> orderList);
+
+    Order addOrder(Order order);
 
     boolean cancelOrder(Integer orderId);
 
