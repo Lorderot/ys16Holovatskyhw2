@@ -1,4 +1,4 @@
-<%@include file="header.jspf"%>
+<%@include file="../common/header.jspf"%>
     <title>Welcome</title>
 </head>
 
@@ -6,6 +6,6 @@
 
 <%@include file="navigation.jspf"%>
 
-    Welcome, ${customer.firstName} ${customer.lastName}!
+    Welcome, admin ${customer.firstName}!
 
-<%@include file="footer.jspf"%>
+<%@include file="../common/footer.jspf"%>

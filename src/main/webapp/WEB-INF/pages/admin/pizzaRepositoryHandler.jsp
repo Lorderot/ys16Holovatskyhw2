@@ -1,4 +1,4 @@
-<%@include file="header.jspf"%>
+<%@include file="../common/header.jspf"%>
     <title>Pizza Repository</title>
 </head>
 
@@ -43,4 +43,4 @@
     </div>
 </div>
 
-<%@include file="footer.jspf"%>
+<%@include file="../common/footer.jspf"%>
