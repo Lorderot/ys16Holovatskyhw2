@@ -35,10 +35,10 @@ public class UserPizzaController {
         pizzaMenu = pizzaService.getPizzasSortedByPrice();
     }
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String showMainPage(ModelMap modelMap) {
         modelMap.addAttribute("customer", getLoggedInCustomer());
-        return "user/welcome";
+        return "user/Profile";
     }
 
     @RequestMapping(value = "/create-order")

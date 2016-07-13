@@ -2,7 +2,7 @@
 
     <div class="navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="<c:url value='/admin/welcome'/>">Home</a></li>
+            <li><a href="<c:url value='/admin/profile'/>">Profile</a></li>
             <li><a href="<c:url value='/admin/list-pizzas'/>">Pizza Repository</a></li>
             <li><a href="<c:url value='/admin/list-orders'/>">Order to complete</a></li>
         </ul>

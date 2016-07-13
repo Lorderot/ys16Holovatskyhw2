@@ -23,10 +23,10 @@ public class AdminPizzaController {
     @Autowired
     private PizzaService pizzaService;
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String showMainPage(ModelMap modelMap) {
         modelMap.addAttribute("customer", getLoggedInCustomer());
-        return "admin/welcome";
+        return "admin/Profile";
     }
 
     @RequestMapping(value = "/list-pizzas", method = RequestMethod.GET)

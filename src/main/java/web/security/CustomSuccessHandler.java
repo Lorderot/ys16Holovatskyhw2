@@ -36,9 +36,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             roles.add(a.getAuthority());
         }
         if (isAdmin(roles)) {
-            url = "/admin/welcome";
+            url = "/admin/profile";
         } else if (isUser(roles)) {
-            url = "/user/welcome";
+            url = "/user/profile";
         } else {
             url = "/accessDenied";
         }
