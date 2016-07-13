@@ -13,17 +13,17 @@ public class SimpleCustomerService implements CustomerService {
 
     @Override
     public boolean updateCustomer(Customer customer) {
-        throw new UnsupportedOperationException();
+        return customerRepository.update(customer);
     }
 
     @Override
-    public boolean deleteCustomer(Customer customer) {
-        throw new UnsupportedOperationException();
+    public boolean deleteCustomer(Integer customerId) {
+        return customerRepository.delete(customerId);
     }
 
     @Override
     public Customer findCustomerById(Integer id) {
-        throw new UnsupportedOperationException();
+        return customerRepository.getCustomerById(id);
     }
 
     @Override

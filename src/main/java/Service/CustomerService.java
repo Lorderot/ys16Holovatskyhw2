@@ -11,7 +11,7 @@ public interface CustomerService {
 
     Customer findCustomerById(Integer id);
 
-    boolean deleteCustomer(Customer customer);
+    boolean deleteCustomer(Integer customerId);
 
     boolean updateCustomer(Customer customer);
 }
